@@ -1,0 +1,229 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Node
+{
+    char word[20];
+    char letters[50];
+    struct Node *next;
+}Node;
+
+int rank[5] = {0};
+
+Node *createNode(char *word,char *letters);
+void addToLinkedList(Node** head, char* word, char* letters);
+void playGame(Node *head, int points);
+void ranks(int score);
+void freeAll(Node* head);
+
+int main() {
+    Node *easy = NULL;     // Linked list for easy words
+    Node *medium = NULL;   // Linked list for medium words
+    Node *hard = NULL;     // Linked list for hard words
+    int option, i;         // User input for menu options
+
+    // Add easy words to the linked list (option 1)
+    addToLinkedList(&easy, "cat", "a c t");
+    addToLinkedList(&easy, "dog", "d g o");
+    addToLinkedList(&easy, "sun", "n s u");
+    addToLinkedList(&easy, "hat", "a h t");
+    addToLinkedList(&easy, "run", "n r u");
+    addToLinkedList(&easy, "pen", "e n p");
+    addToLinkedList(&easy, "cup", "c p u");
+    addToLinkedList(&easy, "bed", "b d e");
+    addToLinkedList(&easy, "map", "a m p");
+    addToLinkedList(&easy, "box", "b o x");
+    addToLinkedList(&easy, "key", "e k y");
+    addToLinkedList(&easy, "car", "a c r");
+    addToLinkedList(&easy, "sun", "n s u");
+    addToLinkedList(&easy, "fly", "f l y");
+    addToLinkedList(&easy, "top", "o p t");
+    addToLinkedList(&easy, "bag", "a b g");
+    addToLinkedList(&easy, "ant", "a n t");
+    addToLinkedList(&easy, "lip", "i l p");
+    addToLinkedList(&easy, "bat", "a b t");
+    addToLinkedList(&easy, "sun", "n s u");
+    addToLinkedList(&easy, "mat", "a m t");
+    addToLinkedList(&easy, "cap", "a c p");
+    addToLinkedList(&easy, "nut", "n u t");
+    addToLinkedList(&easy, "pig", "g i p");
+    addToLinkedList(&easy, "bus", "b u s");
+    addToLinkedList(&easy, "fox", "f o x");
+    addToLinkedList(&easy, "bug", "b u g");
+    addToLinkedList(&easy, "mug", "m u g");
+    addToLinkedList(&easy, "bat", "b a t");
+    addToLinkedList(&easy, "pot", "p o t");
+    addToLinkedList(&easy, "jet", "j e t");
+    addToLinkedList(&easy, "leg", "l e g");
+    addToLinkedList(&easy, "toy", "t o y");
+    addToLinkedList(&easy, "rug", "r u g");
+    addToLinkedList(&easy, "zip", "z i p");
+    addToLinkedList(&easy, "ram", "r a m");
+    addToLinkedList(&easy, "net", "n e t");
+    addToLinkedList(&easy, "cup", "c u p");
+    addToLinkedList(&easy, "fan", "f a n");
+    addToLinkedList(&easy, "peg", "p e g");
+
+    // Add medium words to the linked list (option 2)
+    addToLinkedList(&medium, "elephant", "a e e h l n p t");
+    addToLinkedList(&medium, "banana", "a a a b n n");
+    addToLinkedList(&medium, "computer", "c e m o p r t u");
+    addToLinkedList(&medium, "pencil", "c e i l n p");
+    addToLinkedList(&medium, "keyboard", "a b d e k o r y");
+    addToLinkedList(&medium, "garden", "a d e g n r");
+    addToLinkedList(&medium, "table", "a b e l t");
+    addToLinkedList(&medium, "window", "d i w n o w");
+    addToLinkedList(&medium, "chair", "a c h i r");
+    addToLinkedList(&medium, "flower", "e f l o r w");
+    addToLinkedList(&medium, "picture", "c e i p r t u");
+    addToLinkedList(&medium, "puzzle", "e l p u z z");
+    addToLinkedList(&medium, "guitar", "a g i r t u");
+    addToLinkedList(&medium, "paradox", "a d o p r x a");
+    addToLinkedList(&medium, "symphony", "h m y n o p s y");
+    addToLinkedList(&medium, "bottle", "o b t l e t");
+    addToLinkedList(&medium, "cactus", "t s u a c c");
+    addToLinkedList(&medium, "dancer", "d n e c a r");
+    addToLinkedList(&medium, "eleven", "n v e l e e");
+    addToLinkedList(&medium, "guitar", "g i t u a r");
+    addToLinkedList(&medium, "humble", "u b l e m h");
+    addToLinkedList(&medium, "island", "a l s i d n");
+    addToLinkedList(&medium, "jacket", "t j a k c e");
+    addToLinkedList(&medium, "kitten", "n e k i t t");
+    addToLinkedList(&medium, "lemon", "m o e l n");
+
+    // Add hard words to the linked list (option 3)
+    addToLinkedList(&hard, "championship", "a c h h i i m n o p p s");
+    addToLinkedList(&hard, "breathtaking", "a a b e g h i k n r t t");
+    addToLinkedList(&hard, "exquisite", "e i q s t u x e");
+    addToLinkedList(&hard, "magnificent", "a c e f g i m n t");
+    addToLinkedList(&hard, "phenomenal", "a e h l m n o p");
+    addToLinkedList(&hard, "serendipity", "d e i i n p r s t y");
+    addToLinkedList(&hard, "unbelievable", "a b e i l n u v");
+    addToLinkedList(&hard, "formidable", "d e f i l m o r");
+    addToLinkedList(&hard, "transcendent", "c d e n n r s t t");
+    addToLinkedList(&hard, "extraterrestrial", "a a e e e i l r r r r s t t t x");
+
+    while(1)
+    {
+        printf("Welcome to the Word Puzzle game!\n");
+        printf("1. Play Game\t");
+        printf("2. High Scores\n");
+        printf("0. exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &option);
+        printf("\n");
+
+        switch (option) {
+            case 1:
+                printf("Select difficulty level:\n");
+                printf("1. Easy\t\t2\n");
+                printf("2. Medium\t5\n");
+                printf("3. Hard\t\t10\n");
+                printf("Enter your choice: ");
+                scanf("%d", &option);
+                printf("\n");
+
+                if (option == 1) {
+                    playGame(easy, 2);
+                } else if (option == 2) {
+                    playGame(medium, 5);
+                } else if (option == 3) {
+                    playGame(hard, 10);
+                } else {
+                    printf("Invalid option selected.\n");
+                }
+                break;
+
+            case 2:
+                printf("High Scores:\n");
+                for(i=0; i<5; i++)
+                    printf("%d. %d\n", i+1, rank[i]);
+                printf("\n");
+                break;
+            case 0:
+                freeAll(easy);
+                freeAll(medium);
+                freeAll(hard);
+                exit(0);
+
+            default:
+                printf("Invalid option selected.\n");
+                break;
+        }
+    }
+    return 0;
+}
+
+// Creates a new node for the linked list
+Node *createNode(char *word,char *letters)
+{
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    strcpy(newNode->word, word);
+    strcpy(newNode->letters, letters);
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Adds a new node to the end of the linked list
+void addToLinkedList(Node **head,char* word,char* letters)
+{
+    if (*head == NULL)
+        *head = createNode(word, letters);
+    else
+    {
+        Node* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = createNode(word, letters);
+    }
+}
+
+// Plays the word puzzle game with the given linked list and points
+void playGame(Node *head, int points)
+{
+    Node* temp = head;
+    int score = 0;
+    char word[20];
+    while (temp != NULL) {
+        printf("Make a word using these letters: \"%s\"\n", temp->letters);
+        scanf("%s", word);
+        // Remove newline character from input buffer
+
+        if (strcmp(word, temp->word) == 0)
+        {
+            printf("Congratulation...\n");
+            score += points;
+        }
+        else
+            break;
+        temp = temp->next;
+    }
+    printf("Game End!!\nYour score is %d\n\n", score);
+    ranks(score);
+}
+
+// Updates the ranking based on the score
+void ranks(int score)
+{
+    int t;
+    for (int n = 0; n < 5; n++) {
+        if (score > rank[n]) {
+            t = rank[n];
+            rank[n] = score;
+            score = t;
+        }
+    }
+}
+
+// Frees the memory allocated for the linked list
+void freeAll(Node *head)
+{
+    while (head != NULL) {
+        Node* temp = head;
+        head = head->next;
+        free(temp);
+    }
+    head = NULL;
+}
